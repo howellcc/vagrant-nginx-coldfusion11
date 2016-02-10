@@ -1,0 +1,1 @@
+If you copy the neo-*.xml files and seed.properties file from cfusion/lib into this folder, you can then provision a CF server with your datasources, scheduled task, and all other settings already configured.

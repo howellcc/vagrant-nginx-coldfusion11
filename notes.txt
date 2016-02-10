@@ -1,0 +1,89 @@
+======= NEXT STEPS==========
+Problems:
+	-Current status of nginx rewrite:
+		Working: /Mura_multisite/_donordrive_v2/features/
+		Not Working: /Mura_multisite/_donordrive_v2/
+		Not Working: /Mura_multisite/admin/
+
+	-I tried to get some remote monitoring stuff working 2 ways:
+	1. JStatd.
+		Wrote /opt/jstatd.policy
+			grant codebase "file:/opt/jdk/lib/tools.jar" { permission java.security.AllPermission; };
+		jstatd -J-Djava.security.policy=/opt/jstatd.policy -p 1099
+		http://docs.oracle.com/javase/6/docs/technotes/tools/share/jstatd.html
+		http://www.nljug.org/nieuws/blog-profiling-remote-jvm-using-visualvm/
+		Visual VM couldn't get passed the fact that I was trying to reference a VM instead of the host machine.
+	2. JMX remote
+		Tried adding the following to the jvm.config
+			-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=172.20.0.15
+		Seemed like it should work but VisualVM still couldn't see it.
+		http://stackoverflow.com/questions/856881/how-to-activate-jmx-on-my-jvm-for-access-with-jconsole
+		http://blog.mattwoodward.com/2009/11/monitoring-tomcat-with-java-visualvm.html
+		http://blog.markshead.com/1129/connecting-visual-vm-to-tomcat-7/
+
+	-Consider mounting shared folders via nfs as its MUCH FASTER
+		https://laracasts.com/discuss/channels/general-discussion/for-those-who-find-homesteadvagrantvirtualbox-slow-on-windows
+
+=========TODO=================
+JAVA
+	~install java8
+CF
+	~CF servlets
+	~Custom tags
+	~Custom stubs - created, but not populated
+	~update to java8
+	~MS Driver
+	~Admin settings
+	~Datasources
+	~PDF Service
+	Test SOLR
+	~change to debug classic.cfm to omit __muraresponse__
+NGINX
+	~virtual folders
+	~server up non-CF files.
+	~SSL
+	~Servlets for charting
+
+
+===========================================
+Files Destinations and Purposes
+===========================================
+/cf11/
+	coldfusion -> /opt/coldfusion11/cfusion/bin/ - CF init script
+	hotfix_007.jar -> /opt/coldfusion11/cfusion/hf-updates/ - latest CF hotfix
+	server.xml -> /opt/coldfusion11/cfusion/runtime/conf/ - tomcat server.xml file
+
+/nginx/
+	/sites-available/
+		default ->/etc/nginx/sites-available/ - default site declaration
+	cfProxy.conf -> /etc/nginx/ - NGINX proxy config for passing requests for cf files to CF
+	nginx.conf -> /etc/nginx/
+	proxy_params -> /etc/nginx/ - not sure if this is sill being used.
+
+bashrcAdditions.sh - just a few additions I like to have added to my .bashrc file.
+bootstrap.sh - This is the configuration workhorse. It does all the things.
+CFSilentInstall.properties - Properties file so that the CF Installer knows what to do.
+GC-startup -> /etc/init.d/ - This is an init script that resets a few things that are different between a vbox machine start and "vagrant up".  Notably shared folders.
+Vagrantfile - Vagrant config file.
+
+
+
+============================================
+Dependencies - git LFS (large file support)
+============================================
+CF11 installer
+CF11 hotfix (currently hf7)
+java 8 (currently jdk-8u65)
+Fonts for PDFg http://cgit.freedesktop.org/xorg/font/ibm-type1/snapshot/font-ibm-type1-1.0.3.tar.gz
+
+============
+References
+============
+https://github.com/foundeo/ubuntu-nginx-lucee/blob/master/etc/nginx/lucee-proxy.conf
+
+
+==================================
+Things learned along the way
+==================================
+- One performance improvement I read about along the way was switching from a shared folder to an NFS mounted file. This is a NO GO. NFS on windows introduced case sensitivity realative to file names. This caused a lot of "missing files" on the Mura side of things.
+

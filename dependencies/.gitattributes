@@ -1,0 +1,4 @@
+ColdFusion_11_WWEJ_linux64u3.bin filter=lfs diff=lfs merge=lfs -text
+hotfix_007.jar filter=lfs diff=lfs merge=lfs -text
+jdk-8u66-linux-x64.tar.gz filter=lfs diff=lfs merge=lfs -text
+font-ibm-type1-1.0.3.tar.gz filter=lfs diff=lfs merge=lfs -text

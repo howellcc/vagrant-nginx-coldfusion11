@@ -1,0 +1,24 @@
+<wddxPacket version="1.0">
+	<header/>
+	<data>
+		<array length="1">
+			<struct type="coldfusion.server.ConfigMap">
+				<var name="CacheType">
+					<number>1</number>
+				</var>
+				<var name="TimeToLive">
+					<number>5.0</number>
+				</var>
+				<var name="MaxEngines">
+					<number>1</number>
+				</var>
+				<var name="CacheSize">
+					<number>50</number>
+				</var>
+				<var name="CACHEPATH">
+					<string>/opt/coldfusion11/cfusion/tmpCache/CFFileServlet/_cf_chart</string>
+				</var>
+			</struct>
+		</array>
+	</data>
+</wddxPacket>

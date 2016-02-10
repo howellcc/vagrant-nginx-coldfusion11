@@ -1,0 +1,40 @@
+<wddxPacket version="1.0">
+	<header/>
+	<data>
+		<array length="2">
+			<array length="0"/>
+			<struct type="coldfusion.server.ConfigMap">
+				<var name="consoleVisible">
+					<boolean value="false"/>
+				</var>
+				<var name="maxFileSize">
+					<number>5000000.0</number>
+				</var>
+				<var name="enableOSLogging">
+					<boolean value="false"/>
+				</var>
+				<var name="maxOutFileBackup">
+					<number>20.0</number>
+				</var>
+				<var name="pattern">
+					<string>&quot;%p&quot;,&quot;%t&quot;,%d{&quot;MM/dd/yy&quot;,&quot;HH:mm:ss&quot;},%a,&quot;%m%x&quot;%n</string>
+				</var>
+				<var name="maxOutLogSize">
+					<number>20.0</number>
+				</var>
+				<var name="maxFileBackup">
+					<number>5.0</number>
+				</var>
+				<var name="consolePattern">
+					<string>%d{MMM d, yyyy HH:mm:ss a} %p [%t] - %m%n</string>
+				</var>
+				<var name="priority">
+					<string>information</string>
+				</var>
+				<var name="logDirectory">
+					<string>/opt/coldfusion11/cfusion/logs</string>
+				</var>
+			</struct>
+		</array>
+	</data>
+</wddxPacket>

@@ -1,0 +1,156 @@
+server {
+
+	root /wwwroot;
+
+	listen 80;
+	#listen	  127.0.0.1:80;				  ## use this instead if you want to listen on specific ip
+
+	# we need to listen on all domains for SSL purposes.
+	# server_name localhost localhost.globalcloud.net;
+
+	error_log /var/log/nginx/error.default.log notice;
+	rewrite_log on;
+
+
+	# location /Mura_multisite/ {
+	# 	try_files $uri $uri/ @MuraMultisite-rewrite-rules;
+	# }
+
+	# location @MuraMultisite-rewrite-rules {
+	# 	rewrite "^/Mura_multisite/([a-zA-Z0-9-_]{1,})/^([a-zA-Z0-9/-]+/tag/.+|tag/.+)$" /Mura_multisite/$1/index.cfm/$2;
+	# 	rewrite "^/Mura_multisite/([a-zA-Z0-9-_]{1,})/([a-zA-Z0-9/-\s]+)$" /Mura_multisite/$1/index.cfm/$2;
+	# 	include /etc/nginx/cfProxy.conf;
+	# }
+
+	location /donorDrive/themes/ {
+		alias /wwwroot/donordrivethemes/;
+	}
+	location /donorDrive/clients/ {
+		alias /wwwroot/donordriveclients/;
+	}
+	location /donorDrive/assets/ {
+		alias /wwwroot/donordriveassets/;
+	}
+	location /donorDrive/resources/admin/ {
+		alias /wwwroot/donordrive/admin/resources/;
+	}
+
+
+	location /CFFileServlet/ {
+		alias /opt/coldfusion11/cfusion/tmpCache/CFFileServlet/;
+	}
+
+	location / {
+
+		try_files $uri $uri/ @rewrite-rules;
+	}
+
+	location	@rewrite-rules {
+		#rewrite "^/Mura_multisite/([a-zA-Z0-9-_]{1,})/^([a-zA-Z0-9/-]+/tag/.+|tag/.+)$" /Mura_multisite/$1/index.cfm/$2;
+		#rewrite "^/Mura_multisite/([a-zA-Z0-9-_]{1,})/([a-zA-Z0-9/-\s]+)$" /Mura_multisite/$1/index.cfm/$2;
+
+		include /etc/nginx/cfProxy.conf;
+	}
+
+	location ~ \.(cfm|cfc|cfs|jsp)$ {
+
+	    #gzip off;
+
+	    include /etc/nginx/cfProxy.conf;
+	}
+
+
+	### add expires headers for static files
+#	   location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+
+#		   expires	 1h;
+#		   access_log  off;
+#	   }
+
+
+	## to restrict access to a specific directory use the example below
+	#location ~* /restricted-access/ {
+	#
+	#allow   123.123.123.123;		## set your ip here and remove comment mark
+	#
+	#deny	192.168.0.1;			## deny gateway
+	#allow   192.168.0.0/24;		 ## allow local network
+	#
+	#allow   ::1;				## allow local IPs and deny all others
+	#allow   127.0.0.1;
+	#
+	#deny	all;
+	#}
+
+
+	## to define a virtual folder use the example below
+	#location	~ ^/shared/(.*)$ {
+	#
+	#	alias	   C:/inetpub/wwwroot/shared/;
+	#}
+
+
+	### ssl settings begin -- enable for sites that should use ssl
+	listen  443  ssl;
+	#ssl on;
+	ssl_certificate	 /etc/nginx/ssl/wildcard.cert;	 ## this must point to a valid .crt or .pem file
+	ssl_certificate_key /etc/nginx/ssl/wildcard.key;	 ## the key may be stored in the .pem file
+
+	## ssl_session_cache   shared:SSL:1m;	   ## The cache and other modules which require shared memory support do not work on Windows Vista and later versions due to address space layout randomization being enabled in these Windows versions.
+	#ssl_session_timeout 5m;
+
+	#ssl_prefer_server_ciphers  on;
+
+	### ssl settings end
+
+	### CF Security begin
+
+	#location ~ /META-INF/   { return 404; }
+	#location ~ /WEB-INF/    { return 404; }
+	#location ~ \.config$    { return 404; }
+	location ~ /\.          { return 404; }       ## e.g. .htaccess, .gitignore etc.
+	#location ~ ~$           { return 404; }
+	location ~ \.aspx?$     { return 404; }       ## most likely hackers testing the site
+	location ~ \.php$       { return 404; }
+
+	## CF admin
+	#location ~* /CFIDE/(administrator|adminapi)/ {
+	location /CFIDE/ {
+
+	    ## IP security - add allow entries as needed
+	    #allow   123.123.123.123;                ## set your ip here and remove comment mark
+
+	    #deny    192.168.0.1;                    ## deny gateway
+	    #allow   192.168.0.0/24;                 ## allow local network
+
+	#    allow   ::1;                             ## allow local IPs and deny all others
+	#    allow   127.0.0.1;
+	#    allow   10.0.2.2;
+
+	#    deny    all;
+
+	    #gzip off;
+
+	    # proxy_pass          http://cf_servers/CFIDE/;
+	    # proxy_redirect      off;
+
+	    # proxy_http_version  1.1;
+	    # proxy_set_header    Connection "";
+
+	    # include     /etc/nginx/proxy_params;
+
+	    # expires             epoch;
+	    include /etc/nginx/cfProxy.conf;
+	}
+
+	### CF Security end
+}
+
+
+## redirect non-www to www
+#server {
+
+#	listen			  site1.com:80;
+#	server_name		 site1.com;
+#	return			  301 $scheme://www.site1.com$request_uri;
+#}
