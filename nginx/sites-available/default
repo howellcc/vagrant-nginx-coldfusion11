@@ -12,30 +12,7 @@ server {
 	rewrite_log on;
 
 
-	# location /Mura_multisite/ {
-	# 	try_files $uri $uri/ @MuraMultisite-rewrite-rules;
-	# }
-
-	# location @MuraMultisite-rewrite-rules {
-	# 	rewrite "^/Mura_multisite/([a-zA-Z0-9-_]{1,})/^([a-zA-Z0-9/-]+/tag/.+|tag/.+)$" /Mura_multisite/$1/index.cfm/$2;
-	# 	rewrite "^/Mura_multisite/([a-zA-Z0-9-_]{1,})/([a-zA-Z0-9/-\s]+)$" /Mura_multisite/$1/index.cfm/$2;
-	# 	include /etc/nginx/cfProxy.conf;
-	# }
-
-	location /donorDrive/themes/ {
-		alias /wwwroot/donordrivethemes/;
-	}
-	location /donorDrive/clients/ {
-		alias /wwwroot/donordriveclients/;
-	}
-	location /donorDrive/assets/ {
-		alias /wwwroot/donordriveassets/;
-	}
-	location /donorDrive/resources/admin/ {
-		alias /wwwroot/donordrive/admin/resources/;
-	}
-
-
+	#required so the CFChart and CFHtmlToPdf function propertly
 	location /CFFileServlet/ {
 		alias /opt/coldfusion11/cfusion/tmpCache/CFFileServlet/;
 	}
@@ -46,8 +23,6 @@ server {
 	}
 
 	location	@rewrite-rules {
-		#rewrite "^/Mura_multisite/([a-zA-Z0-9-_]{1,})/^([a-zA-Z0-9/-]+/tag/.+|tag/.+)$" /Mura_multisite/$1/index.cfm/$2;
-		#rewrite "^/Mura_multisite/([a-zA-Z0-9-_]{1,})/([a-zA-Z0-9/-\s]+)$" /Mura_multisite/$1/index.cfm/$2;
 
 		include /etc/nginx/cfProxy.conf;
 	}
@@ -129,17 +104,6 @@ server {
 
 	#    deny    all;
 
-	    #gzip off;
-
-	    # proxy_pass          http://cf_servers/CFIDE/;
-	    # proxy_redirect      off;
-
-	    # proxy_http_version  1.1;
-	    # proxy_set_header    Connection "";
-
-	    # include     /etc/nginx/proxy_params;
-
-	    # expires             epoch;
 	    include /etc/nginx/cfProxy.conf;
 	}
 
