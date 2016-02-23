@@ -1,2 +1,1 @@
-# vagrant-nginx-coldfusion11
-This is a Vagrant project for creating a CF11 dev box running on ubuntu with nginx
+# Vagrant Nginx ColdFusion11This is a Vagrant project for creating an Adobe ColdFusion11 development box that uses Nginx running on Ubuntu 14.04 LTS Trust Tahr. #Requirements- [Git LFS](https://git-lfs.github.com/)- [Vagrant](https://www.vagrantup.com/)  #Getting StartedClone the repository```git clone https://github.com/howellcc/vagrant-nginx-coldfusion11.git myProjectName```Download Large Dependencies```git lfs fetch```Vagrant Up```vagrant up (I bet you didn't see that coming)```#Usage(More to come.....)
