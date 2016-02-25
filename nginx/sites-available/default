@@ -6,7 +6,7 @@ server {
 	#listen	  127.0.0.1:80;				  ## use this instead if you want to listen on specific ip
 
 	# we need to listen on all domains for SSL purposes.
-	# server_name localhost localhost.globalcloud.net;
+	# server_name localhost;
 
 	error_log /var/log/nginx/error.default.log notice;
 	rewrite_log on;
