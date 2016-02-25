@@ -16,9 +16,11 @@ TIMING="$(date +%s)"
 
 #function for asynchronous dependency download
 downloadDependencies(){
-	printf "Retreiving Dependencies from GitHub..."
-	wget -q $DEPENDENCY_FILE_URL -P $DEPENDENCY_LOCATION
-	tar -xzf $DEPENDENCY_LOCATION/dependencies.tar.gz -C $DEPENDENCY_LOCATION
+	if ! [ -e $VAGRANTSHAREDFOLDER/dependencies.tar.gz ]; then
+		printf "Retreiving Dependencies from GitHub..."
+		wget -q $DEPENDENCY_FILE_URL -P $VAGRANTSHAREDFOLDER
+	fi
+	tar -xzf $VAGRANTSHAREDFOLDER/dependencies.tar.gz -C $DEPENDENCY_LOCATION
 	chmod u+x $DEPENDENCY_LOCATION/$CF_INSTALLER
 }
 
@@ -104,8 +106,8 @@ fi
 printf "Font Install Complete"
 
 #install JAVA
-if ! [ -a /opt/jdk$JAVA_VERSION ]; then
-	ln -s /opt/jdk$JAVA_VERSION/ /opt/jdk
+if ! [ -a /opt/jdk ]; then
+	ln -s /opt/jdk$JAVA_VERSION /opt/jdk
 	update-alternatives --install /usr/bin/java java /opt/jdk/bin/java 100
 	update-alternatives --install /usr/bin/javac javac /opt/jdk/bin/javac 100
 fi
@@ -184,4 +186,4 @@ fi
 
 #end Timing
 TIMING="$(($(date +%s)-TIMING))"
-printf "Pretty format: %02d:%02d:%02d:%02d\n" "$((TIMING/86400))" "$((TIMING/3600%24))" "$((TIMING/60%60))" "$((TIMING%60))"
+printf "Bootstrap Script Completed In: %02d:%02d:%02d\n" "$((TIMING/3600%24))" "$((TIMING/60%60))" "$((TIMING%60))"

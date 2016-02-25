@@ -1,9 +1,5 @@
 ======= NEXT STEPS==========
 Problems:
-	-Current status of nginx rewrite:
-		Working: /Mura_multisite/_donordrive_v2/features/
-		Not Working: /Mura_multisite/_donordrive_v2/
-		Not Working: /Mura_multisite/admin/
 
 	-I tried to get some remote monitoring stuff working 2 ways:
 	1. JStatd.
@@ -63,17 +59,16 @@ Files Destinations and Purposes
 bashrcAdditions.sh - just a few additions I like to have added to my .bashrc file.
 bootstrap.sh - This is the configuration workhorse. It does all the things.
 CFSilentInstall.properties - Properties file so that the CF Installer knows what to do.
-GC-startup -> /etc/init.d/ - This is an init script that resets a few things that are different between a vbox machine start and "vagrant up".  Notably shared folders.
+ReMountVagrantFolders -> /etc/init.d/ - This is an init script that resets a few things that are different between a vbox machine start and "vagrant up".  Notably shared folders.
 Vagrantfile - Vagrant config file.
 
 
-
-============================================
-Dependencies - git LFS (large file support)
-============================================
+=================================================
+Dependencies - Store in a release on the project
+=================================================
 CF11 installer
 CF11 hotfix (currently hf7)
-java 8 (currently jdk-8u65)
+java 8 (currently jdk-8u66)
 Fonts for PDFg http://cgit.freedesktop.org/xorg/font/ibm-type1/snapshot/font-ibm-type1-1.0.3.tar.gz
 
 ============
@@ -85,5 +80,11 @@ https://github.com/foundeo/ubuntu-nginx-lucee/blob/master/etc/nginx/lucee-proxy.
 ==================================
 Things learned along the way
 ==================================
-- One performance improvement I read about along the way was switching from a shared folder to an NFS mounted file. This is a NO GO. NFS on windows introduced case sensitivity realative to file names. This caused a lot of "missing files" on the Mura side of things.
+Possible Performance Improvements
+- FileIO: by switching from a shared folder to an NFS mounted file. This is a NO GO. NFS on windows introduced case sensitivity realative to file names. This caused a lot of "missing files" on the Mura side of things.
+- Network Performance: Lots of rumors here.
+	Switching adapter type to different type.
+	Adding separate host and NAT adapters
+- CPU: Adding VBox CPU's didn't seem to help.
+- CF efficiency: Increase number of cached templates
 
