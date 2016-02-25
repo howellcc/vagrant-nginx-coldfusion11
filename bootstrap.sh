@@ -6,6 +6,8 @@ CF_INSTALLER='ColdFusion_11_WWEJ_linux64u3.bin'
 JAVA_TAR_FILE='jdk-8u66-linux-x64.tar.gz'
 JAVA_VERSION='1.8.0_66'
 CERTPATH='/etc/nginx/ssl'
+DEPENDENCY_FILE_URL='https://github.com/howellcc/vagrant-nginx-coldfusion11/releases/download/v1.0.0/dependencies.tar.gz'
+DEPENDENCY_LOCATION='/opt/dependencies'
 
 #Test if nginx has been installed, if so skip apt-get install of all packages.
 if ! [ -d /etc/nginx ]; then
@@ -33,6 +35,13 @@ if ! [ -d /etc/nginx ]; then
 	#echo "RUN=yes" > /etc/default/cachefilesd
 fi
 
+#retreive Dependencies
+echo "retreiving dependencies from GitHub..."
+mkdir $DEPENDENCY_LOCATION
+wget -q $DEPENDENCY_FILE_URL -P $DEPENDENCY_LOCATION
+tar -xzf $DEPENDENCY_LOCATION/dependencies.tar.gz -C $DEPENDENCY_LOCATION
+rm $DEPENDENCY_LOCATION/dependencies.tar.gz
+
 #set timezone
 echo "setting timezone..."
 mv /etc/localtime /etc/localtime-old
@@ -40,11 +49,11 @@ ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 echo "US/Eastern" > /etc/timezone
 export TZ=US/Eastern
 
-#download and install fonts needed for PDF Service
+#install fonts needed for PDF Service
 if ! [ -e /usr/share/fonts/courbi.afm ]; then
-	tar -xzf $VAGRANTSHAREDFOLDER/dependencies/font-ibm-type1-1.0.3.tar.gz -C /opt/
-	cp -f /opt/font-ibm-type1-1.0.3/* /usr/share/fonts/
-	rm -rf /opt/font-ibm-type1-1.0.3
+	tar -xzf $DEPENDENCY_LOCATION/font-ibm-type1-1.0.3.tar.gz -C $DEPENDENCY_LOCATION/
+	cp -f $DEPENDENCY_LOCATION/font-ibm-type1-1.0.3/* /usr/share/fonts/
+	rm -rf $DEPENDENCY_LOCATION/font-ibm-type1-1.0.3
 fi
 
 #add additional things to .bashrc - For the sake of replayability of this script.  Any future additions should go in a separate bashAdditions file and be tested for independantly.
@@ -85,7 +94,7 @@ nginx -s reload
 #install JAVA
 if ! [ -a /opt/jdk ]; then
 	echo "installing java..."
-	tar -xzf $VAGRANTSHAREDFOLDER/dependencies/$JAVA_TAR_FILE -C /opt/
+	tar -xzf $DEPENDENCY_LOCATION/$JAVA_TAR_FILE -C /opt/
 	ln -s /opt/jdk$JAVA_VERSION/ /opt/jdk
 	update-alternatives --install /usr/bin/java java /opt/jdk/bin/java 100
 	update-alternatives --install /usr/bin/javac javac /opt/jdk/bin/javac 100
@@ -98,7 +107,7 @@ if [ ! -d "/opt/coldfusion11" ]; then
 	#Needed for the pdfg installer to complete successfully as well as the installers for CF updates
 	export DISPLAY=
 
-	$VAGRANTSHAREDFOLDER/dependencies/$CF_INSTALLER -f $VAGRANTSHAREDFOLDER/CFSilentInstall.properties > /opt/CFInstall.log
+	$DEPENDENCY_LOCATION/$CF_INSTALLER -f $VAGRANTSHAREDFOLDER/CFSilentInstall.properties > /opt/CFInstall.log
 
 	#tomcat args
 	cp -f $VAGRANTSHAREDFOLDER/cfusion/runtime/conf/server.xml $CF_DIR/cfusion/runtime/conf/
@@ -133,7 +142,7 @@ if [ ! -d "/opt/coldfusion11" ]; then
 	if [ ! -d "/opt/coldfusion11/cfusion/hf-updates" ]; then
 		mkdir /opt/coldfusion11/cfusion/hf-updates
 	fi
-	cp -f $VAGRANTSHAREDFOLDER/dependencies/hotfix_007.jar $CF_DIR/cfusion/hf-updates/
+	cp -f $DEPENDENCY_LOCATION/hotfix_007.jar $CF_DIR/cfusion/hf-updates/
 	# we'll run this later after chowing it all
 
 	#Who's your daddy?
@@ -162,6 +171,7 @@ if ! [ -e /etc/init.d/ReMountVagrantFolders ]; then
 fi
 
 
-#service coldfusion start
+#clean up dependency folder as all items should have been installed by now
+rm $DEPENDENCY_LOCATION/*
 
 
