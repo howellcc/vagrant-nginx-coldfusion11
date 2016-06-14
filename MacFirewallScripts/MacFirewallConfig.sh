@@ -3,9 +3,9 @@
 sudo mv /etc/pf.conf /etc/pf.conf_backup_$(date +%F)
 sudo mv /etc/pf.anchors/gcforwarding.conf /etc/pf.anchors/gcforwarding.conf_backup_$(date +%F)
 # Move the files from the Desktop to their new location
-sudo mv ./pf.conf /etc/pf.conf
-sudo mv ./com.apple.pfctl.plist /Library/LaunchDaemons/com.apple.pfctl.plist
-sudo mv ./gcforwarding.conf /etc/pf.anchors/gcforwarding.conf
+sudo cp -f ./pf.conf /etc/pf.conf
+sudo cp -f ./com.apple.pfctl.plist /Library/LaunchDaemons/com.apple.pfctl.plist
+sudo cp -f ./gcforwarding.conf /etc/pf.anchors/gcforwarding.conf
 # Give them the correct Permission
 cd /etc
 sudo chmod 644 pf.conf

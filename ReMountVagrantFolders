@@ -20,7 +20,7 @@ case $1 in
     start|restart|force-reload)
 	if ! [ -e /vagrant/Vagrantfile ]; then
 		mount -t vboxsf -o uid=1000,gid=1000 vagrant /vagrant
-		mount -t vboxsf -o uid=1000,gid=1000 wwwroot /wwwroot
+		mount -t vboxsf -o uid=1000,gid=33 wwwroot /wwwroot
 	fi
 	;;
     stop)

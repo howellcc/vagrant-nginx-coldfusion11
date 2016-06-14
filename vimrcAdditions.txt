@@ -1,0 +1,3 @@
+"VimRC Addtions 1
+"lighten the comment color so its actually readable.
+highlight comment ctermfg=lightblue
