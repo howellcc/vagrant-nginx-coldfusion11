@@ -54,6 +54,10 @@ if ! [ -d /etc/nginx ]; then
 	#if I feel like experimenting with NFS again, I need the following
 	# apt-get install -qq -y cachefilesd
 	# echo "RUN=yes" > /etc/default/cachefilesd
+
+	#Install MS Core Fonts for use with <cfhtmltopdf>
+	echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections
+	apt-get install -qq ttf-mscorefonts-installer --quiet
 fi
 
 #set timezone
@@ -196,7 +200,7 @@ npm install -g gulp-cli gulp
 
 cd /
 npm install npm
-npm install gulp gulp-concat gulp-uglify gulp-less gulp-sass gulp-cssmin gulp-rename gulp-css-url-adjuster gulp-newer gulp-critical-css gulp-imagemin
+npm install gulp gulp-concat gulp-uglify gulp-less gulp-sass gulp-cssmin gulp-rename gulp-css-url-adjuster gulp-newer gulp-critical-css gulp-imagemin gulp-natural-sort
 
 #end Timing
 TIMING="$(($(date +%s)-TIMING))"

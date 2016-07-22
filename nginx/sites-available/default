@@ -28,16 +28,12 @@ server {
 	}
 
 	location ~ \.(cfm|cfc|cfs|jsp)$ {
-
-	    #gzip off;
-
 	    include /etc/nginx/cfProxy.conf;
 	}
 
 
 	### add expires headers for static files
 #	   location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
-
 #		   expires	 1h;
 #		   access_log  off;
 #	   }
@@ -57,12 +53,6 @@ server {
 	#deny	all;
 	#}
 
-
-	## to define a virtual folder use the example below
-	#location	~ ^/shared/(.*)$ {
-	#
-	#	alias	   C:/inetpub/wwwroot/shared/;
-	#}
 
 
 	### ssl settings begin -- enable for sites that should use ssl
