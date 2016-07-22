@@ -46,6 +46,9 @@ Vagrant.configure(2) do |config|
 	# your network.
 	# config.vm.network "public_network"
 
+	#If the vbguest plugin is installed, it can be disabled (for quicker rebuild) with this.
+	#config.vbguest.auto_update = false
+
 	# Provider-specific configuration so you can fine-tune various
 	# backing providers for Vagrant. These expose provider-specific options.
 	# Example for VirtualBox:
@@ -56,6 +59,10 @@ Vagrant.configure(2) do |config|
 		vb.cpus = 1
 		 #move nat to the 172.20/16 subnet
 		vb.customize ["modifyvm", :id, "--natnet1", "172.20/16"]
+
+		#open port for the server monitor
+		config.vm.network "forwarded_port", guest: 5500, host: 5500, protocol: "udp"
+		config.vm.network "forwarded_port", guest: 5500, host: 5500, protocol: "tcp"
 
 		if OS.mac?
 			#port forwarding on the mac relies on the firewall taking requests on 80 -> 8080 where virtbox will pick up and route back down to 80 on the guest.

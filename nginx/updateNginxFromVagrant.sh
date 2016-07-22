@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#This is a simple updating script that was allowing me to edit config files on ny PC and copy them in with this.
-
 #uncomment to enable debugging
 #set -x
 
@@ -20,7 +18,7 @@ nginxFiles[4]='updateNginxFromVagrant.sh'
 for myFile in "${nginxFiles[@]}"
 do
 	cp -f $VAGRANTSHAREDFOLDER/nginx/$myFile /etc/nginx/$myFile
-	fromdos /etc/nginx/$myFile
+	dos2unix -s -q /etc/nginx/$myFile
 done
 
 if ! [ -e $CERTPATH ]; then
